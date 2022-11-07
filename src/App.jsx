@@ -8,11 +8,11 @@ const App = () => {
   return (
     <BrowserRouter>
       <nav className="navbar">
-        <Link to={"/elections"}>Elections</Link>
+        {/* <Link to={"/"}>Elections</Link> */}
         <Link to={"/create"}>+ Election</Link>
       </nav>
       <Routes>
-        <Route path="/elections" element={<Elections />} />
+        <Route path="/" element={<Elections />} />
         <Route path="/create" element={<CreateElection />} />
       </Routes>
     </BrowserRouter>

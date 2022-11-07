@@ -1,7 +1,6 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { deleteElection, getElections } from "../api";
+import { getElections } from "../api";
 
 
 
@@ -14,12 +13,7 @@ export default function Elections() {
 
   console.log('data', data)
 
-const { mutateAsync, isLoading: isDeleteLoading, isError:isDeleteError } = useMutation(deleteElection);
 
-const deleteAnElection = async (id)=>{
-  console.log('id', id)
-  await mutateAsync(id)
-}
 
 
   if (isError) {

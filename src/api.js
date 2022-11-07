@@ -7,6 +7,10 @@ export const getElections = async () => {
 };
 
 //fns
-export const deleteElection = async id => {
-  const response = await axios.delete(`http://localhost:3000/elections/${id}`);
+export const createElection = async electionDetails => {
+  const response = await axios.post(
+    `http://localhost:3000/elections`,
+    electionDetails
+  );
+  return response;
 };
