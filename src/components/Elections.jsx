@@ -1,19 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient  } from "@tanstack/react-query";
 import React from "react";
-import { getElections } from "../api";
+import { deleteElection, getElections } from "../api";
 
 
 
 export default function Elections() {
+  const queryClient = useQueryClient()
   const { data, isLoading, isError, is } = useQuery({
     queryKey: ["Elections"],
     queryFn: getElections,
     staleTime:5000
   });
 
-  console.log('data', data)
+
+  const {mutateAsync, isError:deleteIsError, isLoading:deleteIsloading} = useMutation(deleteElection, {
+    onSuccess:()=>{
+    queryClient.invalidateQueries("elections");
+    }
+  })
 
 
+
+  const deleteAnElection = async(id) =>{
+    await mutateAsync(id)
+  }
 
 
   if (isError) {
@@ -28,7 +38,7 @@ export default function Elections() {
       {data?.data?.data?.map(election => (
         <div className="posts" key={election._id}>
           <p key={election._id}>{election.candidate}</p>
-          <button onClick={() => deleteElectioned(post.id)}>Delete</button>
+          <button onClick={() => deleteAnElection(post.id)}>Delete</button>
         </div>
       ))}
     </div>

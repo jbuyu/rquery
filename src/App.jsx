@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import CreateElection from "./components/CreateElection";
@@ -8,7 +7,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <nav className="navbar">
-        {/* <Link to={"/"}>Elections</Link> */}
+        <Link to={"/"}>Elections</Link>
         <Link to={"/create"}>+ Election</Link>
       </nav>
       <Routes>

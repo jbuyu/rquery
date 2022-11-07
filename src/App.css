@@ -23,3 +23,10 @@ form{
   justify-content: center;
   flex-direction: column;
 }
+.single-election{
+  display: flex;
+  margin: auto;
+  width: 30%;
+  justify-content: space-between;
+  margin-top: 10px;
+}

@@ -14,3 +14,10 @@ export const createElection = async electionDetails => {
   );
   return response;
 };
+
+export const deleteElection = async electionID => {
+  const response = await axios.delete(
+    `http://localhost:3000/elections/${electionID}`
+  );
+  return response;
+};
