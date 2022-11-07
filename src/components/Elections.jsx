@@ -38,7 +38,7 @@ export default function Elections() {
       {data?.data?.data?.map(election => (
         <div className="posts" key={election._id}>
           <p key={election._id}>{election.candidate}</p>
-          <button onClick={() => deleteAnElection(post.id)}>Delete</button>
+          <button onClick={() => deleteAnElection(election._id)}>Delete</button>
         </div>
       ))}
     </div>
