@@ -19,9 +19,7 @@ export default function CreateElection() {
   const queryClient = useQueryClient()
   const {register, handleSubmit} = useForm()
 
-  const onSubmit = (data)=>{
-    createAnElection(data);
-  }
+
 
   const {
     mutateAsync,
@@ -34,9 +32,10 @@ export default function CreateElection() {
     }
   });
 
-  const createAnElection = async(data) => {
-    await mutateAsync(data);
-  };
+    const onSubmit = async data => {
+      await mutateAsync(data);
+    };
+
 
 
   const {isLoading:isElectionsLoading, isError:electionError, data} = useQuery({queryKey:["elections"], queryFn:getElections})
@@ -53,7 +52,6 @@ export default function CreateElection() {
   });
 
   const deleteAnElection = async id => {
-    console.log('id', id)
     await deleteMutateAsync(id);
   };
 
@@ -79,7 +77,11 @@ export default function CreateElection() {
           <input defaultValue="votes" {...register("votes")} />
           <label htmlFor="party">Party</label>
           <input defaultValue="party" {...register("party")} />
-          <button type="submit">Create Election</button>
+          <button type="submit">
+            {
+              isLoading ? "loading": "Create Election"
+            }
+          </button>
         </form>
         <div className="elections">
           {data?.data?.data?.map(election => (
@@ -91,14 +93,6 @@ export default function CreateElection() {
             </div>
           ))}
         </div>
-        {/* <ClipLoader
-          color={color}
-          loading={loading}
-          cssOverride={override}
-          size={150}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        /> */}
       </div>
     );
 }

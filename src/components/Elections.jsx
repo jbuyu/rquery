@@ -9,7 +9,7 @@ export default function Elections() {
   const { data, isLoading, isError, is } = useQuery({
     queryKey: ["Elections"],
     queryFn: getElections,
-    staleTime:5000
+    // staleTime:5000
   });
 
 
