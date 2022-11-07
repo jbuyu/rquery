@@ -1,0 +1,14 @@
+#root {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+}
+
+.navbar{
+  display: flex;
+  color: red;
+  justify-content: space-around;
+}
