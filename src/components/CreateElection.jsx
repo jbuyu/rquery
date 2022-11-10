@@ -1,9 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import React, { useState } from 'react'
-import { useForm  } from 'react-hook-form'
-import { createElection, deleteElection, getElections } from '../api'
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { createElection, deleteElection, getElections } from "../api";
 import ClipLoader from "react-spinners/ClipLoader";
-
+import { toast } from "react-hot-toast";
 
 const override = {
   display: "block",
@@ -11,35 +11,33 @@ const override = {
   borderColor: "red",
 };
 
-
-
 export default function CreateElection() {
-   let [loading, setLoading] = useState(true);
-   let [color, setColor] = useState("#ffffff");
-  const queryClient = useQueryClient()
-  const {register, handleSubmit} = useForm()
+  let [loading, setLoading] = useState(true);
+  let [color, setColor] = useState("#ffffff");
+  const queryClient = useQueryClient();
+  const { register, handleSubmit } = useForm();
 
+  // const onPostError = () => {
+  //   return <p>Error</p>;
+  // };
 
-
-  const {
-    mutateAsync,
-    isLoading,
-    isError,
-  } = useMutation(createElection, {
-    onSuccess: ()=>{
-      console.log('mm')
+  const { mutateAsync, isLoading, isError } = useMutation(createElection, {
+    onSuccess: () => {
+      console.log("mm");
       queryClient.invalidateQueries("elections");
-    }
+    },
+    // onError: onPostError,
   });
 
-    const onSubmit = async data => {
-      await mutateAsync(data);
-    };
+  const onSubmit = async (data) => {
+    await mutateAsync(data);
+  };
 
-
-
-  const {isLoading:isElectionsLoading, isError:electionError, data} = useQuery({queryKey:["elections"], queryFn:getElections})
-
+  const {
+    isLoading: isElectionsLoading,
+    isError: electionError,
+    data,
+  } = useQuery({ queryKey: ["elections"], queryFn: getElections });
 
   const {
     mutateAsync: deleteMutateAsync,
@@ -51,11 +49,11 @@ export default function CreateElection() {
     },
   });
 
-  const deleteAnElection = async id => {
+  const deleteAnElection = async (id) => {
     await deleteMutateAsync(id);
   };
 
-  if (isElectionsLoading){
+  if (isElectionsLoading) {
     return (
       <ClipLoader
         color={color}
@@ -66,33 +64,34 @@ export default function CreateElection() {
         data-testid="loader"
       />
     );
-  }
-    return (
-      <div className="create-election">
-        <h3>Create Election</h3>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="candidate">Candidate</label>
-          <input defaultValue="candidate" {...register("candidate")} />
-          <label htmlFor="votes">Votes</label>
-          <input defaultValue="votes" {...register("votes")} />
-          <label htmlFor="party">Party</label>
-          <input defaultValue="party" {...register("party")} />
-          <button type="submit">
-            {
-              isLoading ? "loading": "Create Election"
-            }
-          </button>
-        </form>
-        <div className="elections">
-          {data?.data?.data?.map(election => (
-            <div className="single-election" key={election._id}>
-              <p key={election._id}>{election.candidate}</p>
-              <button onClick={() => deleteAnElection(election._id)}>
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
+  };
+  
+
+  
+  return (
+    <div className="create-election">
+      <h3>Create Election</h3>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <label htmlFor="candidate">Candidate</label>
+        <input defaultValue="candidate" {...register("candidate")} />
+        <label htmlFor="votes">Votes</label>
+        <input defaultValue="votes" {...register("votes")} />
+        <label htmlFor="party">Party</label>
+        <input defaultValue="party" {...register("party")} />
+        <button type="submit">
+          {isLoading ? "loading" : "Create Election"}
+        </button>
+      </form>
+      <div className="elections">
+        {data?.data?.data?.map((election) => (
+          <div className="single-election" key={election._id}>
+            <p key={election._id}>{election.candidate}</p>
+            <button onClick={() => deleteAnElection(election._id)}>
+              Delete
+            </button>
+          </div>
+        ))}
       </div>
-    );
+    </div>
+  );
 }
