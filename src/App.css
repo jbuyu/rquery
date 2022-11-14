@@ -4,29 +4,38 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  
+
 }
 
-.navbar{
+.navbar {
   display: flex;
   color: red;
   justify-content: space-around;
 }
-form{
+
+form {
   display: flex;
   flex-direction: column;
   margin: auto;
   width: 30%;
 }
-.create-election{
+
+.create-election {
   display: flex;
   justify-content: center;
   flex-direction: column;
 }
-.single-election{
+
+.single-election {
   display: flex;
   margin: auto;
   width: 30%;
   justify-content: space-between;
+  margin-top: 10px;
+}
+
+.election {
+  display: flex;
+  justify-content: space-around;
   margin-top: 10px;
 }

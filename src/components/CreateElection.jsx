@@ -1,13 +1,24 @@
 import React from 'react'
 import { useForm  } from 'react-hook-form'
+import { useCreateElection, useGetElections } from '../hooks';
 
 
 export default function CreateElection() {
+  const {mutateAsync, isError, isLoading:isCreateLoading} = useCreateElection();
+  const {isLoading, data} = useGetElections()
     const { register, handleSubmit } = useForm();
 
 
   const onSubmit = (data)=>{
-    console.log('data', data)
+    mutateAsync(data)
+    // console.log('data', data)
+  }
+
+
+  if(isLoading){
+    return (
+      <p>Loading Elections on create</p>
+    )
   }
   
     return (
@@ -25,7 +36,11 @@ export default function CreateElection() {
           </button>
         </form>
         <div className="">
-         
+      {
+        data?.data?.data.map(item=>(
+        <div>{item.candidate}</div>
+      ))
+     }
         </div>
       </div>
     );
