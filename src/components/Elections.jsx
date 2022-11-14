@@ -1,33 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { toast, Toaster } from "react-hot-toast";
-import { deleteElection, getElections } from "../api";
+import { useDeleteElection, useElections } from "../api";
 
 export default function Elections() {
-  const queryClient = useQueryClient();
-  const { data, isLoading } = useQuery({
-    queryKey: ["Elections"],
-    queryFn: getElections,
-    // staleTime:5000,
-    // cacheTime: 3000 * 1000,
-  });
 
-  // const onDeleteError = () => {
-  //   toast.error("Do not delete");
-  // };
-
+  const {isLoading, data} = useElections();
+  console.log('data', data)
   const {
     mutateAsync,
     isError: deleteIsError,
     isLoading: deleteIsloading,
-  } = useMutation(deleteElection, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("elections");
-    },
-  });
+  } = useDeleteElection()
 
-  const deleteAnElection = async (id) => {
-    await mutateAsync(id);
+  const deleteAnElection =  (id) => {
+     mutateAsync(id);
   };
 
   if (isLoading) {

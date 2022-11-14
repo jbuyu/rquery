@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { createElection, deleteElection, getElections } from "../api";
+import { useCreateElection, useDeleteElection, useElections } from "../api";
 import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-hot-toast";
 
@@ -17,40 +17,22 @@ export default function CreateElection() {
   const queryClient = useQueryClient();
   const { register, handleSubmit } = useForm();
 
-  // const onPostError = () => {
-  //   return <p>Error</p>;
-  // };
+  const {mutateAsync, isLoading, isError} = useCreateElection()
 
-  const { mutateAsync, isLoading, isError } = useMutation(createElection, {
-    onSuccess: () => {
-      console.log("mm");
-      queryClient.invalidateQueries("elections");
-    },
-    // onError: onPostError,
-  });
-
-  const onSubmit = async (data) => {
-    await mutateAsync(data);
+  const onSubmit = (data) => {
+    mutateAsync(data);
   };
 
-  const {
-    isLoading: isElectionsLoading,
-    isError: electionError,
-    data,
-  } = useQuery({ queryKey: ["elections"], queryFn: getElections });
+  const {data, isLoading:isElectionsLoading} = useElections()
 
   const {
     mutateAsync: deleteMutateAsync,
     isError: deleteIsError,
     isLoading: deleteIsloading,
-  } = useMutation(deleteElection, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("elections");
-    },
-  });
+  } = useDeleteElection()
 
-  const deleteAnElection = async (id) => {
-    await deleteMutateAsync(id);
+  const deleteAnElection = (id) => {
+     deleteMutateAsync(id);
   };
 
   if (isElectionsLoading) {
@@ -73,11 +55,11 @@ export default function CreateElection() {
       <h3>Create Election</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="candidate">Candidate</label>
-        <input defaultValue="candidate" {...register("candidate")} />
+        <input defaultValue="" {...register("candidate")} />
         <label htmlFor="votes">Votes</label>
-        <input defaultValue="votes" {...register("votes")} />
+        <input defaultValue="" {...register("votes")} />
         <label htmlFor="party">Party</label>
-        <input defaultValue="party" {...register("party")} />
+        <input defaultValue="" {...register("party")} />
         <button type="submit">
           {isLoading ? "loading" : "Create Election"}
         </button>
@@ -89,6 +71,11 @@ export default function CreateElection() {
             <button onClick={() => deleteAnElection(election._id)}>
               Delete
             </button>
+            {
+              deleteIsloading ? (
+                <p>.....</p>
+              ): null
+            }
           </div>
         ))}
       </div>
